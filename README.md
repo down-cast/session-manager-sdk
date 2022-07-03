@@ -1,2 +1,2 @@
-# session-manager-sdk
-A set of NuGets that provide all the necessary tools to use session-manager-api
+# logging-sdk
+A small NuGet that makes it easier to configure Serilog across all micro-services
