@@ -10,7 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Publish Downcast.SessionManager.SDK.Authentication.Extensions
-        id: publish_logging_nuget
         uses: Rebel028/publish-nuget@v2.7.0
         with:
           # Filepath of the project to be packaged, relative to root of repository
@@ -53,7 +52,6 @@ jobs:
           # INCLUDE_SYMBOLS: false
           
       - name: Publish Downcast.SessionManager.SDK.Authentication.Handler
-        id: publish_http_client_nuget
         uses: Rebel028/publish-nuget@v2.7.0
         with:
           PROJECT_FILE_PATH: src/Downcast.SessionManager.SDK.Authentication.Handler/Downcast.SessionManager.SDK.Authentication.Handler.csproj
@@ -64,7 +62,6 @@ jobs:
           TAG_FORMAT: v*-Downcast.SessionManager.SDK.Authentication.Handler
 
       - name: Publish Downcast.SessionManager.SDK.Client
-        id: publish_http_errors_nuget
         uses: Rebel028/publish-nuget@v2.7.0
         with:
           PROJECT_FILE_PATH: src/Downcast.SessionManager.SDK.Client/Downcast.SessionManager.SDK.Client.csproj
@@ -75,7 +72,6 @@ jobs:
           TAG_FORMAT: v*-Downcast.SessionManager.SDK.Client
       
       - name: Publish Downcast.SessionManager.SDK.Extensions
-        id: publish_http_errors_nuget
         uses: Rebel028/publish-nuget@v2.7.0
         with:
           PROJECT_FILE_PATH: src/Downcast.SessionManager.SDK.Extensions/Downcast.SessionManager.SDK.Extensions.csproj
