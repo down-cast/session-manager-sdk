@@ -11,14 +11,13 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 
-namespace Downcast.SessionManager.Authentication.Handler;
+namespace Downcast.SessionManager.SDK.Authentication.Handler;
 
 public class DowncastAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
     private readonly ISessionManagerClient _sessionManagerClient;
     private readonly ILogger<DowncastAuthenticationHandler> _logger;
-    private const string BearerTokenScheme = "Bearer";
-
+    internal const string BearerTokenScheme = "Bearer";
 
     public DowncastAuthenticationHandler(
         IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -65,7 +64,12 @@ public class DowncastAuthenticationHandler : AuthenticationHandler<Authenticatio
             .Select(pair => new Claim(pair.Key, pair.Value.ToString() ?? string.Empty))
             .ToList();
 
-        var identity = new ClaimsIdentity(userClaims, "remote-session-validation", ClaimNames.Name, ClaimNames.Role);
+        var identity = new ClaimsIdentity(
+            userClaims,
+            "remote-session-validation",
+            ClaimNames.Name,
+            ClaimNames.Role);
+        
         var claimsPrincipal = new ClaimsPrincipal(identity);
 
         var authTicket = new AuthenticationTicket(

@@ -10,11 +10,12 @@ namespace Downcast.SessionManager.SDK.Extensions;
 
 public static class SessionManagerConfigExtensions
 {
-    public static IHttpClientBuilder ConfigureSessionManagerHttpClient(
+    public static IHttpClientBuilder AddSessionManagerHttpClient(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        return services.AddRefitClient<ISessionManagerClient>()
+        return services
+            .AddRefitClient<ISessionManagerClient>()
             .ConfigureDowncastHttpClient(configuration, "SessionManagerClient");
     }
 }
