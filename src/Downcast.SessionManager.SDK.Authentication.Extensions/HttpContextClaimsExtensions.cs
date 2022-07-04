@@ -54,11 +54,11 @@ public static class HttpContextClaimsExtensions
             throw new DcException(ErrorCodes.ClaimNotFound, $"Claim {claimName} not present in context");
         }
 
-        return claim.Type;
+        return claim.Value;
     }
 
     public static string? GetClaimValue(this ClaimsPrincipal claimsPrincipal, string claimName)
     {
-        return claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type.Equals(claimName))?.Type;
+        return claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type.Equals(claimName))?.Value;
     }
 }
