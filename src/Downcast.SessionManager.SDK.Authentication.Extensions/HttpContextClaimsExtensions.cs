@@ -11,9 +11,12 @@ public static class HttpContextClaimsExtensions
         return claimsPrincipal.GetClaimValue(ClaimNames.UserId);
     }
 
-    public static string? GetRole(this ClaimsPrincipal claimsPrincipal)
+    public static IReadOnlyCollection<string> GetRoles(this ClaimsPrincipal claimsPrincipal)
     {
-        return claimsPrincipal.GetClaimValue(ClaimNames.Role);
+        return claimsPrincipal.Claims
+            .Where(claim => claim.Type.Equals(ClaimNames.Role))
+            .Select(claim => claim.Value)
+            .ToList();
     }
 
     public static string? GetEmail(this ClaimsPrincipal claimsPrincipal)
@@ -29,11 +32,6 @@ public static class HttpContextClaimsExtensions
     public static string GetRequiredUserId(this ClaimsPrincipal claimsPrincipal)
     {
         return claimsPrincipal.GetRequiredClaimValue(ClaimNames.UserId);
-    }
-
-    public static string GetRequiredRole(this ClaimsPrincipal claimsPrincipal)
-    {
-        return claimsPrincipal.GetRequiredClaimValue(ClaimNames.Role);
     }
 
     public static string GetRequiredEmail(this ClaimsPrincipal claimsPrincipal)

@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <RepositoryUrl>https://github.com/down-cast/session-manager-sdk</RepositoryUrl>
         <IsPackable>true</IsPackable>
-        <Version>0.0.3</Version>
+        <Version>0.0.4</Version>
     </PropertyGroup>
 
     <ItemGroup>
