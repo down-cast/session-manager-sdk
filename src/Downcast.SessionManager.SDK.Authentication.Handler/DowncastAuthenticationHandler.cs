@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.Net.Http.Headers;
 
 namespace Downcast.SessionManager.SDK.Authentication.Handler;
@@ -17,6 +18,7 @@ public class DowncastAuthenticationHandler : AuthenticationHandler<Authenticatio
 {
     private readonly ISessionManagerClient _sessionManagerClient;
     private readonly ILogger<DowncastAuthenticationHandler> _logger;
+    private readonly JsonWebTokenHandler _handler = new();
     internal const string BearerTokenScheme = "Bearer";
 
     public DowncastAuthenticationHandler(
@@ -52,24 +54,21 @@ public class DowncastAuthenticationHandler : AuthenticationHandler<Authenticatio
 
     private async Task<AuthenticateResult> GetRemoteAuthenticateResult(string token)
     {
-        IDictionary<string, object>? claims = await ValidateTokenRemotely(token).ConfigureAwait(false);
-        return claims is null
-            ? HandleRequestResult.Fail("Null claims, returning failed authentication")
-            : BuildAuthenticationResult(claims);
+        bool isTokenValid = await IsTokenValid(token).ConfigureAwait(false);
+        return isTokenValid
+            ? BuildAuthenticationResult(token)
+            : HandleRequestResult.Fail("Null claims, returning failed authentication");
     }
 
-    private static AuthenticateResult BuildAuthenticationResult(IDictionary<string, object> claims)
+    private AuthenticateResult BuildAuthenticationResult(string token)
     {
-        IEnumerable<Claim> userClaims = claims
-            .Select(pair => new Claim(pair.Key, pair.Value.ToString() ?? string.Empty))
-            .ToList();
-
+        IEnumerable<Claim> claims = _handler.ReadJsonWebToken(token).Claims;
         var identity = new ClaimsIdentity(
-            userClaims,
+            claims,
             "remote-session-validation",
             ClaimNames.Name,
             ClaimNames.Role);
-        
+
         var claimsPrincipal = new ClaimsPrincipal(identity);
 
         var authTicket = new AuthenticationTicket(
@@ -80,16 +79,17 @@ public class DowncastAuthenticationHandler : AuthenticationHandler<Authenticatio
         return AuthenticateResult.Success(authTicket);
     }
 
-    private async Task<IDictionary<string, object>?> ValidateTokenRemotely(string token)
+    private async Task<bool> IsTokenValid(string token)
     {
         try
         {
-            return await _sessionManagerClient.ValidateSessionToken(token).ConfigureAwait(false);
+            await _sessionManagerClient.ValidateSessionToken(token).ConfigureAwait(false);
+            return true;
         }
         catch (Exception e)
         {
             _logger.LogWarning("Could not validate user session: {Message}", e.Message);
-            return null;
+            return false;
         }
     }
 }

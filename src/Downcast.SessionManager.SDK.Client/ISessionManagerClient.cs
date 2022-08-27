@@ -10,5 +10,5 @@ public interface ISessionManagerClient
     Task<TokenResult> CreateSessionToken([Body] IDictionary<string, object> claims);
 
     [Post("/api/v1/session/validate")]
-    Task<IDictionary<string, object>> ValidateSessionToken([Body(BodySerializationMethod.Serialized)] string token);
+    Task ValidateSessionToken([Body(BodySerializationMethod.Serialized)] string token);
 }
