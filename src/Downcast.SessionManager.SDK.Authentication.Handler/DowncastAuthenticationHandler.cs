@@ -66,7 +66,7 @@ public class DowncastAuthenticationHandler : AuthenticationHandler<Authenticatio
         var identity = new ClaimsIdentity(
             claims,
             "remote-session-validation",
-            ClaimNames.Name,
+            ClaimNames.DisplayName,
             ClaimNames.Role);
 
         var claimsPrincipal = new ClaimsPrincipal(identity);

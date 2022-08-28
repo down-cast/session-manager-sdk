@@ -6,12 +6,7 @@ namespace Downcast.SessionManager.SDK.Authentication.Extensions;
 
 public static class HttpContextClaimsExtensions
 {
-    public static string? GetUserId(this ClaimsPrincipal claimsPrincipal)
-    {
-        return claimsPrincipal.GetClaimValue(ClaimNames.UserId);
-    }
-
-    public static IReadOnlyCollection<string> GetRoles(this ClaimsPrincipal claimsPrincipal)
+    public static IReadOnlyCollection<string> Roles(this ClaimsPrincipal claimsPrincipal)
     {
         return claimsPrincipal.Claims
             .Where(claim => claim.Type.Equals(ClaimNames.Role))
@@ -19,30 +14,21 @@ public static class HttpContextClaimsExtensions
             .ToList();
     }
 
-    public static string? GetEmail(this ClaimsPrincipal claimsPrincipal)
-    {
-        return claimsPrincipal.GetClaimValue(ClaimNames.Email);
-    }
-
-    public static string? GetName(this ClaimsPrincipal claimsPrincipal)
-    {
-        return claimsPrincipal.GetClaimValue(ClaimNames.Name);
-    }
-
-    public static string GetRequiredUserId(this ClaimsPrincipal claimsPrincipal)
+    public static string UserId(this ClaimsPrincipal claimsPrincipal)
     {
         return claimsPrincipal.GetRequiredClaimValue(ClaimNames.UserId);
     }
 
-    public static string GetRequiredEmail(this ClaimsPrincipal claimsPrincipal)
+    public static string Email(this ClaimsPrincipal claimsPrincipal)
     {
         return claimsPrincipal.GetRequiredClaimValue(ClaimNames.Email);
     }
-
-    public static string GetRequiredName(this ClaimsPrincipal claimsPrincipal)
+    
+    public static string? DisplayName(this ClaimsPrincipal claimsPrincipal)
     {
-        return claimsPrincipal.GetRequiredClaimValue(ClaimNames.Name);
+        return claimsPrincipal.GetClaimValue(ClaimNames.DisplayName);
     }
+    
 
     public static string GetRequiredClaimValue(this ClaimsPrincipal claimsPrincipal, string claimName)
     {
