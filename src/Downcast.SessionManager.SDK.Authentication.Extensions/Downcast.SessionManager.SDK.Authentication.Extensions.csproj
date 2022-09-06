@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Downcast.Common.Errors" Version="0.0.13" />
+      <PackageReference Include="Downcast.Common.Errors" Version="0.0.16" />
     </ItemGroup>
 
 </Project>
